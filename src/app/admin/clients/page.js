@@ -213,8 +213,8 @@ export default function AdminClientsPage() {
 
       {/* Add Client Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-          <div className="bg-surface border border-border p-6 rounded-none w-full max-w-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
+          <div className="bg-surface border border-border p-6 rounded-none w-full max-w-md max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Add New Client</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
@@ -276,7 +276,7 @@ export default function AdminClientsPage() {
 
       {/* Edit Client Modal */}
       {editingClient && editFormData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
           <div className="bg-surface border border-border p-6 rounded-none w-full max-w-md max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Edit Client</h2>
             <form onSubmit={handleEditSubmit} className="space-y-4">

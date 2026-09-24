@@ -219,7 +219,7 @@ export default function AdminProjectsPage() {
 
       {/* New Project Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
           <div className="bg-surface border border-border p-6 rounded-none w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold mb-4">Create New Project</h2>
             <form onSubmit={handleSubmit} className="space-y-4">

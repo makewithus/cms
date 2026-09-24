@@ -133,8 +133,8 @@ export default function AdminDevelopersPage() {
 
       {/* Invite Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
-          <div className="w-full max-w-md border border-border bg-surface p-6 relative rounded-none">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md border border-border bg-surface p-6 relative rounded-none max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-bold tracking-tight mb-4">Add Developer</h2>
             <form onSubmit={handleInvite} className="space-y-4">
               <div className="space-y-1">

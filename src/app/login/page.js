@@ -44,7 +44,29 @@ export default function LoginPage() {
       // Keep isLoading true - the effect above redirects once the role resolves.
     } catch (err) {
       console.error(err);
-      toast.error(err.message || "Invalid email or password. Please try again.");
+      let errorMessage = "Invalid email or password. Please try again.";
+      if (err.code) {
+        switch (err.code) {
+          case 'auth/invalid-credential':
+          case 'auth/user-not-found':
+          case 'auth/wrong-password':
+            errorMessage = "Invalid email or password.";
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = "Too many failed attempts. Please try again later.";
+            break;
+          case 'auth/network-request-failed':
+            errorMessage = "Network error. Please check your internet connection.";
+            break;
+          default:
+            errorMessage = "An error occurred during sign in. Please try again.";
+        }
+      } else if (err.message) {
+        if (err.message.includes("Firebase API key missing")) {
+            errorMessage = "Server configuration error. Please contact support.";
+        }
+      }
+      toast.error(errorMessage);
       setIsLoading(false);
     }
   };

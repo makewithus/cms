@@ -15,6 +15,7 @@ export default function ClientProjectPage({ params }) {
   const [timeline, setTimeline] = useState([]);
   const [updates, setUpdates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showFullTimeline, setShowFullTimeline] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -118,22 +119,32 @@ export default function ClientProjectPage({ params }) {
         </div>
 
         <div className="space-y-6">
-          <h2 className="text-xl font-semibold">Project Timeline</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold">Project Timeline</h2>
+            {timeline.length > 4 && (
+              <button 
+                onClick={() => setShowFullTimeline(!showFullTimeline)}
+                className="text-sm font-medium text-muted-foreground hover:text-foreground underline transition-colors"
+              >
+                {showFullTimeline ? 'View Less' : 'View All'}
+              </button>
+            )}
+          </div>
           <Card>
             <CardContent className="p-6">
               <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-border before:to-transparent">
                 {timeline.length === 0 && <p className="text-sm text-muted-foreground text-center relative z-10">No events recorded.</p>}
-                {timeline.map((event, index) => (
+                {(showFullTimeline ? timeline : timeline.slice(0, 4)).map((event, index) => (
                   <div key={event.id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
                     <div className="flex items-center justify-center w-10 h-10 rounded-none border border-white bg-foreground text-background shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
                     </div>
                     <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-none border border-border bg-surface shadow">
-                      <div className="flex items-center justify-between space-x-2 mb-1">
-                        <div className="font-bold text-foreground text-sm">{event.title}</div>
-                        <time className="text-xs font-medium text-muted-foreground">{event.createdAt?.toDate?.()?.toLocaleDateString()}</time>
+                      <div className="flex items-start justify-between space-x-2 mb-1">
+                        <div className="font-bold text-foreground text-sm break-words leading-tight">{event.title}</div>
+                        <time className="text-xs font-medium text-muted-foreground shrink-0 mt-0.5">{event.createdAt?.toDate?.()?.toLocaleDateString()}</time>
                       </div>
-                      <div className="text-sm text-muted-foreground">{event.description}</div>
+                      <div className="text-sm text-muted-foreground mt-2">{event.description}</div>
                     </div>
                   </div>
                 ))}
