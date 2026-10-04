@@ -101,9 +101,6 @@ export default function AdminProjectsPage() {
       toast.success("Project created successfully");
       setShowModal(false);
       setFormData(initialFormData);
-      // The API already returns the full created project - use it directly instead of
-      // re-querying all three collections (projects/clients/developers) again.
-      setProjects(prev => [{ id: data.id, ...data.project }, ...prev]);
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -126,7 +123,6 @@ export default function AdminProjectsPage() {
       if (!res.ok) throw new Error(data.error || "Failed to update project");
 
       toast.success(nextArchived ? "Project archived" : "Project restored");
-      setProjects(prev => prev.map(p => p.id === project.id ? { ...p, archived: nextArchived } : p));
     } catch (error) {
       toast.error(error.message);
     } finally {
