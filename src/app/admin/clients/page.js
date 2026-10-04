@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, query, getDocs, orderBy } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, onSnapshot } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase/client";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
@@ -33,25 +33,22 @@ export default function AdminClientsPage() {
   };
   const [formData, setFormData] = useState(initialFormData);
 
-  const fetchClients = async () => {
-    try {
-      const q = query(collection(db, "clients"), orderBy("createdAt", "desc"));
-      const snapshot = await getDocs(q);
+  useEffect(() => {
+    const q = query(collection(db, "clients"), orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const clientsData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       }));
       setClients(clientsData);
-    } catch (error) {
+      setLoading(false);
+    }, (error) => {
       console.error("Error fetching clients:", error);
       toast.error("Failed to load clients");
-    } finally {
       setLoading(false);
-    }
-  };
+    });
 
-  useEffect(() => {
-    fetchClients();
+    return () => unsubscribe();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -217,8 +214,8 @@ export default function AdminClientsPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }}>
           <div className="card-elevated w-full max-w-md max-h-[90vh] overflow-y-auto" style={{ padding: 24 }}>
-            <h2 className="page-title mb-4" style={{ fontSize: 18 }}>Add New Client</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="page-title mb-6" style={{ fontSize: 20 }}>Add New Client</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <div>
                 <label className="block text-sm font-medium mb-1">Company Name *</label>
                 <input required type="text" className="w-full flex h-10 rounded-none border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring" 
@@ -280,8 +277,8 @@ export default function AdminClientsPage() {
       {editingClient && editFormData && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }}>
           <div className="card-elevated w-full max-w-md max-h-[90vh] overflow-y-auto" style={{ padding: 24 }}>
-            <h2 className="page-title mb-4" style={{ fontSize: 18 }}>Edit Client</h2>
-            <form onSubmit={handleEditSubmit} className="space-y-4">
+            <h2 className="page-title mb-6" style={{ fontSize: 20 }}>Edit Client</h2>
+            <form onSubmit={handleEditSubmit} className="flex flex-col gap-5">
               <div>
                 <label className="block text-sm font-medium mb-1">Company Name *</label>
                 <input required type="text" className="w-full flex h-10 rounded-none border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring"

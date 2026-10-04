@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, query, getDocs, orderBy, where } from "firebase/firestore";
+import { collection, query, getDocs, orderBy, where, onSnapshot } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase/client";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
@@ -30,32 +30,32 @@ export default function AdminProjectsPage() {
   };
   const [formData, setFormData] = useState(initialFormData);
 
-  const fetchData = async () => {
-    try {
-      const [snapshot, clientsSnapshot, devsSnapshot] = await Promise.all([
-        getDocs(query(collection(db, "projects"), orderBy("createdAt", "desc"))),
-        getDocs(query(collection(db, "clients"), orderBy("createdAt", "desc"))),
-        getDocs(query(collection(db, "users"), where("role", "==", "developer")))
-      ]);
-      
-      const projectsData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setProjects(projectsData);
-      setClients(clientsSnapshot.docs.map(d => ({id: d.id, ...d.data()})));
-      setDevelopers(devsSnapshot.docs.map(d => ({id: d.id, ...d.data()})));
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      toast.error("Failed to load project data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchData();
+    let loaders = { projects: true, clients: true, devs: true };
+    const checkLoading = () => {
+      if (!loaders.projects && !loaders.clients && !loaders.devs) setLoading(false);
+    };
+
+    const unsubProjects = onSnapshot(query(collection(db, "projects"), orderBy("createdAt", "desc")), (snapshot) => {
+      setProjects(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      loaders.projects = false; checkLoading();
+    }, (error) => { console.error(error); toast.error("Failed to load projects"); loaders.projects = false; checkLoading(); });
+
+    const unsubClients = onSnapshot(query(collection(db, "clients"), orderBy("createdAt", "desc")), (snapshot) => {
+      setClients(snapshot.docs.map(d => ({id: d.id, ...d.data()})));
+      loaders.clients = false; checkLoading();
+    }, (error) => { console.error(error); loaders.clients = false; checkLoading(); });
+
+    const unsubDevs = onSnapshot(query(collection(db, "users"), where("role", "==", "developer")), (snapshot) => {
+      setDevelopers(snapshot.docs.map(d => ({id: d.id, ...d.data()})));
+      loaders.devs = false; checkLoading();
+    }, (error) => { console.error(error); loaders.devs = false; checkLoading(); });
+
+    return () => {
+      unsubProjects();
+      unsubClients();
+      unsubDevs();
+    };
   }, []);
 
   const getHealthBadgeVariant = (health) => {
@@ -223,8 +223,8 @@ export default function AdminProjectsPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }}>
           <div className="card-elevated w-full max-w-lg max-h-[90vh] overflow-y-auto" style={{ padding: 24 }}>
-            <h2 className="page-title mb-4" style={{ fontSize: 18 }}>Create New Project</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <h2 className="page-title mb-6" style={{ fontSize: 20 }}>Create New Project</h2>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <div>
                 <label className="block text-sm font-medium mb-1">Project Name *</label>
                 <input required type="text" className="w-full flex h-10 rounded-none border border-input bg-transparent px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring" 
