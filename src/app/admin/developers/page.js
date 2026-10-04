@@ -85,11 +85,11 @@ export default function AdminDevelopersPage() {
   };
 
   return (
-    <div className="p-8 w-full max-w-7xl mx-auto space-y-6 relative">
-      <div className="flex justify-between items-center">
+    <div className="page-container relative">
+      <div className="page-header">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Developers</h1>
-          <p className="text-muted-foreground">Manage your development team members.</p>
+          <h1 className="page-title">Developers</h1>
+          <p className="page-subtitle">Manage your development team members.</p>
         </div>
         <Button onClick={() => setIsModalOpen(true)}>Add Developer</Button>
       </div>
@@ -119,9 +119,11 @@ export default function AdminDevelopersPage() {
                   <TableRow key={dev.id}>
                     <TableCell className="font-medium">{dev.name}</TableCell>
                     <TableCell>{dev.email}</TableCell>
-                    <TableCell className="text-muted-foreground">--</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell style={{ color: "var(--text-muted)" }}>--</TableCell>
+                    <TableCell>
+                      <div className="flex justify-end">
                       <Button variant="outline" size="sm" onClick={() => toast.info("Developer management coming soon")}>Manage</Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -133,9 +135,9 @@ export default function AdminDevelopersPage() {
 
       {/* Invite Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md border border-border bg-surface p-6 relative rounded-none max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold tracking-tight mb-4">Add Developer</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }}>
+          <div className="card-elevated w-full max-w-md relative max-h-[90vh] overflow-y-auto" style={{ padding: 24 }}>
+            <h2 className="page-title mb-4" style={{ fontSize: 18 }}>Add Developer</h2>
             <form onSubmit={handleInvite} className="space-y-4">
               <div className="space-y-1">
                 <label className="text-sm font-medium">Name</label>

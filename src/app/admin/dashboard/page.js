@@ -52,17 +52,23 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold tracking-tight mb-8">Dashboard</h1>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Dashboard</h1>
+          <p className="page-subtitle">Project, client, and delivery health overview</p>
+        </div>
+        <span className="badge badge-red">CMS</span>
+      </div>
       
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="stats-grid">
           {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-            <div key={i} className="p-6 bg-surface border border-border rounded-none animate-pulse h-28" />
+            <div key={i} className="card animate-pulse" style={{ height: 112 }} />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="stats-grid">
           <StatCard title="TOTAL CLIENTS" value={stats.totalClients} />
           <StatCard title="ACTIVE PROJECTS" value={stats.activeProjects} />
           <StatCard title="COMPLETED" value={stats.completedProjects} />
@@ -79,9 +85,10 @@ export default function AdminDashboard() {
 
 function StatCard({ title, value }) {
   return (
-    <div className="p-6 bg-surface border border-border rounded-none">
-      <div className="text-sm font-medium text-muted-foreground mb-2">{title}</div>
-      <div className="text-3xl font-semibold">{value}</div>
+    <div className="card" style={{ padding: 20 }}>
+      <div className="badge badge-gray">{title}</div>
+      <div className="stat-divider" />
+      <div style={{ fontSize: 30, lineHeight: 1, fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.04em" }}>{value}</div>
     </div>
   );
 }

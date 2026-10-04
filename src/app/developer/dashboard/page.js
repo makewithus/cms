@@ -31,57 +31,63 @@ export default function DeveloperDashboard() {
   }, [user]);
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold tracking-tight mb-8">My Assigned Projects</h1>
+    <div className="page-container">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">My Assigned Projects</h1>
+          <p className="page-subtitle">Manage implementation work and delivery status</p>
+        </div>
+        <span className="badge badge-red">DEVELOPER</span>
+      </div>
       
       {loading ? (
         <div className="space-y-4">
           {[1, 2].map(i => (
-            <div key={i} className="p-6 bg-surface border border-border rounded-none animate-pulse h-32" />
+            <div key={i} className="card animate-pulse" style={{ height: 128 }} />
           ))}
         </div>
       ) : projects.length === 0 ? (
-        <div className="p-12 text-center bg-surface border border-border rounded-none">
-          <p className="text-muted-foreground text-sm">No projects assigned to you yet.</p>
+        <div className="card" style={{ padding: 48, textAlign: "center" }}>
+          <p style={{ color: "var(--text-secondary)", fontSize: 13 }}>No projects assigned to you yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {projects.map(project => (
-            <div key={project.id} className="p-6 bg-surface border border-border rounded-none flex flex-col justify-between">
+            <div key={project.id} className="card flex flex-col justify-between" style={{ padding: 24 }}>
               <div>
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="font-semibold text-lg leading-tight">{project.name}</h3>
-                  <span className="text-xs px-2 py-1 bg-muted rounded-none font-medium uppercase tracking-wider shrink-0 ml-2">{project.status}</span>
+                  <span className="badge badge-gray shrink-0 ml-2">{project.status}</span>
                 </div>
                 {project.description && (
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-6">{project.description}</p>
+                  <p className="text-sm line-clamp-2 mb-6" style={{ color: "var(--text-secondary)" }}>{project.description}</p>
                 )}
               </div>
               
-              <div className="space-y-6 text-sm text-muted-foreground mt-auto">
+              <div className="space-y-6 text-sm mt-auto" style={{ color: "var(--text-secondary)" }}>
                 <div className="space-y-2">
                   {getCurrentStage(project.milestones) && (
                     <div className="flex justify-between">
-                      <span className="font-medium text-foreground">Current Stage</span>
-                      <span className="font-bold text-foreground">{getCurrentStage(project.milestones)}</span>
+                      <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>Current Stage</span>
+                      <span style={{ color: "var(--text-primary)", fontWeight: 700 }}>{getCurrentStage(project.milestones)}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="font-medium text-foreground">Health</span>
-                    <span className="font-bold text-foreground capitalize">{project.health?.replace('_', ' ') || 'On Track'}</span>
+                    <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>Health</span>
+                    <span style={{ color: "var(--text-primary)", fontWeight: 700, textTransform: "capitalize" }}>{project.health?.replace('_', ' ') || 'On Track'}</span>
                   </div>
                   {project.expectedDeliveryDate && (
                     <div className="flex justify-between">
-                      <span className="font-medium text-foreground">Delivery</span>
-                      <span className="font-bold text-foreground">{new Date(project.expectedDeliveryDate).toLocaleDateString()}</span>
+                      <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>Delivery</span>
+                      <span style={{ color: "var(--text-primary)", fontWeight: 700 }}>{new Date(project.expectedDeliveryDate).toLocaleDateString()}</span>
                     </div>
                   )}
                   <div className="flex justify-between">
-                    <span className="font-medium text-foreground">Progress</span>
-                    <span className="font-bold text-foreground">{project.progress}%</span>
+                    <span style={{ color: "var(--text-primary)", fontWeight: 500 }}>Progress</span>
+                    <span style={{ color: "var(--text-primary)", fontWeight: 700 }}>{project.progress}%</span>
                   </div>
-                  <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
-                    <div className="bg-foreground h-full transition-all duration-500" style={{ width: `${project.progress}%` }} />
+                  <div className="w-full h-2 overflow-hidden" style={{ background: "var(--bg-secondary)", border: "1px solid var(--border)" }}>
+                    <div className="h-full transition-all duration-500" style={{ width: `${project.progress}%`, background: "var(--brand-red)" }} />
                   </div>
                 </div>
                 

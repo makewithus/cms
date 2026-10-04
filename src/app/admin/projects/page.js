@@ -137,16 +137,16 @@ export default function AdminProjectsPage() {
   const visibleProjects = projects.filter(p => showArchived || !p.archived);
 
   return (
-    <div className="p-8 w-full max-w-7xl mx-auto space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="page-container">
+      <div className="page-header">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-          <p className="text-muted-foreground">Monitor and manage all active client projects.</p>
+          <h1 className="page-title">Projects</h1>
+          <p className="page-subtitle">Monitor and manage all active client projects.</p>
         </div>
         <Button onClick={() => setShowModal(true)}>New Project</Button>
       </div>
 
-      <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer w-fit">
+      <label className="flex items-center gap-2 text-sm cursor-pointer w-fit" style={{ color: "var(--text-secondary)", marginBottom: 20 }}>
         <input type="checkbox" checked={showArchived} onChange={e => setShowArchived(e.target.checked)} />
         Show archived projects
       </label>
@@ -187,16 +187,17 @@ export default function AdminProjectsPage() {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
-                        <div className="w-full bg-secondary h-2 flex-1 rounded-full overflow-hidden">
+                        <div className="w-full h-2 flex-1 overflow-hidden" style={{ background: "var(--bg-primary)", border: "1px solid var(--border)" }}>
                           <div
-                            className="bg-foreground h-full rounded-full"
-                            style={{ width: `${project.progress || 0}%` }}
+                            className="h-full"
+                            style={{ width: `${project.progress || 0}%`, background: "var(--brand-red)" }}
                           />
                         </div>
-                        <span className="text-xs text-muted-foreground">{project.progress || 0}%</span>
+                        <span className="text-xs" style={{ color: "var(--text-secondary)" }}>{project.progress || 0}%</span>
                       </div>
                     </TableCell>
-                    <TableCell className="text-right space-x-2">
+                    <TableCell>
+                      <div className="flex justify-end gap-2">
                       <Link href={`/admin/projects/${project.id}`}>
                         <Button variant="outline" size="sm">Manage</Button>
                       </Link>
@@ -208,6 +209,7 @@ export default function AdminProjectsPage() {
                       >
                         {archivingId === project.id ? '...' : project.archived ? 'Restore' : 'Archive'}
                       </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -219,9 +221,9 @@ export default function AdminProjectsPage() {
 
       {/* New Project Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-          <div className="bg-surface border border-border p-6 rounded-none w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Create New Project</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }}>
+          <div className="card-elevated w-full max-w-lg max-h-[90vh] overflow-y-auto" style={{ padding: 24 }}>
+            <h2 className="page-title mb-4" style={{ fontSize: 18 }}>Create New Project</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Project Name *</label>

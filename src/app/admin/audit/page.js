@@ -49,11 +49,11 @@ export default function AdminAuditPage() {
   };
 
   return (
-    <div className="p-8 w-full max-w-7xl mx-auto space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="page-container">
+      <div className="page-header">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Audit Log</h1>
-          <p className="text-muted-foreground">System-wide chronological feed of actions.</p>
+          <h1 className="page-title">Audit Log</h1>
+          <p className="page-subtitle">System-wide chronological feed of actions.</p>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export default function AdminAuditPage() {
               ) : (
                 logs.map((log) => (
                   <TableRow key={log.id}>
-                    <TableCell className="whitespace-nowrap text-muted-foreground">
+                    <TableCell className="whitespace-nowrap" style={{ color: "var(--text-secondary)" }}>
                       {formatDate(log.createdAt)}
                     </TableCell>
                     <TableCell>
@@ -91,12 +91,14 @@ export default function AdminAuditPage() {
                       </Badge>
                     </TableCell>
                     <TableCell>{log.actorName || log.actorId}</TableCell>
-                    <TableCell className="text-muted-foreground">{log.entityType} {log.entityId ? `(${log.entityId})` : ""}</TableCell>
-                    <TableCell className="max-w-xs truncate text-muted-foreground">
+                    <TableCell style={{ color: "var(--text-secondary)" }}>{log.entityType} {log.entityId ? `(${log.entityId})` : ""}</TableCell>
+                    <TableCell className="max-w-xs truncate" style={{ color: "var(--text-secondary)" }}>
                       {log.description || "-"}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell>
+                      <div className="flex justify-end">
                       <Button variant="outline" size="sm" onClick={() => setSelectedLog(log)}>View</Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -107,8 +109,8 @@ export default function AdminAuditPage() {
       </Card>
 
       {selectedLog && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setSelectedLog(null)}>
-          <div className="bg-surface border border-border p-6 w-full max-w-lg max-h-[85vh] overflow-y-auto space-y-4" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }} onClick={() => setSelectedLog(null)}>
+          <div className="card-elevated w-full max-w-lg max-h-[85vh] overflow-y-auto space-y-4" style={{ padding: 24 }} onClick={e => e.stopPropagation()}>
             <div className="flex justify-between items-start">
               <h2 className="text-xl font-bold">Audit Record</h2>
               <Badge variant="secondary" className="uppercase text-[10px]">{selectedLog.action}</Badge>

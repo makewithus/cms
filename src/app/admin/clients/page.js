@@ -151,11 +151,11 @@ export default function AdminClientsPage() {
   };
 
   return (
-    <div className="p-8 w-full max-w-7xl mx-auto space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="page-container">
+      <div className="page-header">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Clients</h1>
-          <p className="text-muted-foreground">Manage client accounts and organizations.</p>
+          <h1 className="page-title">Clients</h1>
+          <p className="page-subtitle">Manage client accounts and organizations.</p>
         </div>
         <Button onClick={() => setShowModal(true)}>Add Client</Button>
       </div>
@@ -184,7 +184,7 @@ export default function AdminClientsPage() {
               ) : (
                 clients.map((client) => (
                   <TableRow key={client.id}>
-                    <TableCell className="font-medium">{client.companyName}</TableCell>
+                    <TableCell className="font-medium whitespace-nowrap">{client.companyName}</TableCell>
                     <TableCell>{client.contactPerson}</TableCell>
                     <TableCell>{client.email}</TableCell>
                     <TableCell>
@@ -192,7 +192,8 @@ export default function AdminClientsPage() {
                         {client.status || 'active'}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right space-x-2">
+                    <TableCell>
+                      <div className="flex justify-end gap-2">
                       <Button variant="outline" size="sm" onClick={() => openEdit(client)}>Edit</Button>
                       <Button
                         variant="outline"
@@ -202,6 +203,7 @@ export default function AdminClientsPage() {
                       >
                         {archivingId === client.id ? '...' : client.status === 'archived' ? 'Restore' : 'Archive'}
                       </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -213,9 +215,9 @@ export default function AdminClientsPage() {
 
       {/* Add Client Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-          <div className="bg-surface border border-border p-6 rounded-none w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Add New Client</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }}>
+          <div className="card-elevated w-full max-w-md max-h-[90vh] overflow-y-auto" style={{ padding: 24 }}>
+            <h2 className="page-title mb-4" style={{ fontSize: 18 }}>Add New Client</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Company Name *</label>
@@ -276,9 +278,9 @@ export default function AdminClientsPage() {
 
       {/* Edit Client Modal */}
       {editingClient && editFormData && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-          <div className="bg-surface border border-border p-6 rounded-none w-full max-w-md max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">Edit Client</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.65)" }}>
+          <div className="card-elevated w-full max-w-md max-h-[90vh] overflow-y-auto" style={{ padding: 24 }}>
+            <h2 className="page-title mb-4" style={{ fontSize: 18 }}>Edit Client</h2>
             <form onSubmit={handleEditSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Company Name *</label>
