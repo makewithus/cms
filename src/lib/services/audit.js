@@ -22,7 +22,8 @@ export function createAuditLog(batchOrTx, data) {
     previousValue: previousValue || null,
     newValue: newValue || null,
     description,
-    createdAt: FieldValue.serverTimestamp()
+    module: 'CMS',
+    timestamp: new Date().toISOString()
   };
 
   if (batchOrTx) {
