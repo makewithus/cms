@@ -3,6 +3,11 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 import "./globals.css";
 
+export const viewport = {
+  themeColor: "#0a0a0a",
+  colorScheme: "dark",
+};
+
 export const metadata = {
   title: "MakeWithUs | Client Portal",
   description: "MakeWithUs Client Project Tracking Portal",
@@ -10,7 +15,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className="h-full antialiased" data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning className="h-full antialiased dark" style={{ colorScheme: "dark" }} data-scroll-behavior="smooth">
+      <head>
+        <meta name="color-scheme" content="dark" />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
           <AuthProvider>
